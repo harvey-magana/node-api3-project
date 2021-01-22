@@ -1,8 +1,10 @@
 const express = require('express');
 
+const Posts = require('./posts-model.js');
+
 const router = express.Router();
 
-const Posts = require('./posts-model.js');
+
 
 router.get('/', (req, res) => {
   // do your magic!
@@ -34,3 +36,4 @@ router.put('/:id', (req, res) => {
 });
 
 // do not forget to export the router
+module.exports = router;

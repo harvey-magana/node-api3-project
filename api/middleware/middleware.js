@@ -1,13 +1,6 @@
 function logger(req, res, next) {
   // do your magic!
-
-  /**
-   * logs to the console the following information about each request:
-   * request method
-   * request url
-   * timestamp
-   * this middleware runs on every request made to the API
-   */
+  console.log(`[${new Date().toISOString()} ${req.method} to ${req.url} from ${req.get('Origin')}]`);
 }
 
 function validateUserId(req, res, next) {

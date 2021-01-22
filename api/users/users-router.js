@@ -1,8 +1,10 @@
 const express = require('express');
 
+const Users = require('./users-model.js');
+
 const router = express.Router();
 
-const Users = require('./users-model.js');
+
 
 router.post('/', (req, res) => {
   // do your magic!
@@ -23,9 +25,10 @@ router.get('/', (req, res) => {
   })
 });
 
-router.get('/:id', validateUserId (req, res) => {
+router.get('/:id', validateUserId(), (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
+  res.status(200).json(req.user)
 
 });
 
@@ -46,9 +49,37 @@ router.post('/:id/posts', (req, res) => {
   // and another middleware to check that the request body is valid
 });
 
-router.get('/:id/posts', (req, res) => {
+router.get('/:id/posts', validateUserId(), (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
+  Users.findUserPosts(req.params.id)
+    .then(posts => {
+      res.status(200).json(posts)
+    })
+    .catch(error => {
+      next(error)
+    })
 });
 
+function validateUserId(req, res, next) {
+  // do your magic!
+  return (req, res, next) => {
+    users.getById(req.params.id)
+      .then(user => {
+        if(user) {
+          req.user = user;
+          next();
+        } else {
+          res.status(404).json({
+            message: "User not found."
+          })
+        }
+      })
+      .catch(error => {
+        next(error);
+      })
+  }
+}
+
 // do not forget to export the router
+module.exports = router;
