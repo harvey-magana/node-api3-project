@@ -41,11 +41,38 @@ function validateUser(req, res, next) {
 
 function validatePostId(req, res, next) {
   // do your magic!
-  
+  return (req, res, next) => {
+    posts.getById(req.params.id)
+      .then(post => {
+        if(user) {
+          req.post = post;
+          next();
+        } else {
+          res.status(404).json({
+            message: "Post not found."
+          })
+        }
+      })
+      .catch(error => {
+        next(error);
+      })
+  }
 }
 
 function validatePost(req, res, next) {
   // do your magic!
+  return (req, res, next) => {
+    if(!req.body) {
+      return res.status(400).json({
+        message: "Missing post data."
+      })
+    } else if (!req.body.text) {
+      return res.status(400).json({
+        message: "Missing rquired text field."
+      })
+    }
+    next();
+  }
 }
 
 // do not forget to expose these functions to other modules

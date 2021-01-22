@@ -35,5 +35,25 @@ router.put('/:id', (req, res) => {
   // this needs a middleware to verify post id
 });
 
+function validatePostId(req, res, next) {
+  // do your magic!
+  return (req, res, next) => {
+    posts.getById(req.params.id)
+      .then(post => {
+        if(user) {
+          req.post = post;
+          next();
+        } else {
+          res.status(404).json({
+            message: "Post not found."
+          })
+        }
+      })
+      .catch(error => {
+        next(error);
+      })
+  }
+}
+
 // do not forget to export the router
 module.exports = router;
