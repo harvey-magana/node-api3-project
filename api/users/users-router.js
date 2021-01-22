@@ -81,5 +81,21 @@ function validateUserId(req, res, next) {
   }
 }
 
+function validateUser(req, res, next) {
+  // do your magic!
+  return (req, res, next) => {
+    if(!req.body) {
+      return res.status(400).json({
+        message: "Missing user data."
+      })
+    } else if (!req.body.name) {
+      return res.status(400).json({
+        message: "Missing rquired name field."
+      })
+    }
+    next();
+  }
+}
+
 // do not forget to export the router
 module.exports = router;
