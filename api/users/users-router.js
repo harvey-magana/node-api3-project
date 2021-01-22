@@ -2,6 +2,8 @@ const express = require('express');
 
 const router = express.Router();
 
+const Users = require('./users-model.js');
+
 router.post('/', (req, res) => {
   // do your magic!
   // this needs a middleware to check that the request body is valid
@@ -9,11 +11,22 @@ router.post('/', (req, res) => {
 
 router.get('/', (req, res) => {
   // do your magic!
+  Users.get(req.query)
+  .then(users => {
+    res.status(200).json(users)
+  })
+  .catch(error => {
+    console.log(error);
+    res.status(500).json({
+      message: "Error retreiving user."
+    })
+  })
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', validateUserId (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
+
 });
 
 router.delete('/:id', (req, res) => {
