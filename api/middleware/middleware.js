@@ -12,13 +12,22 @@ function logger(req, res, next) {
 
 function validateUserId(req, res, next) {
   // do your magic!
-
-  /**
-   * this middleware will be used for all user endpoints that include an id parameter
-   * in the url, 
-   * example, /api/users/:id
-   * it should check the database to make sure there is a user with that id
-   */
+  return (req, res, next) => {
+    users.getById(req.params.id)
+      .then(user => {
+        if(user) {
+          req.user = user;
+          next();
+        } else {
+          res.status(404).json({
+            message: "User not found."
+          })
+        }
+      })
+      .catch(error => {
+        next(error);
+      })
+  }
 }
 
 function validateUser(req, res, next) {
