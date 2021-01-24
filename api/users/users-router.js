@@ -17,6 +17,15 @@ const router = express.Router();
 router.post('/', (req, res) => {
   // do your magic!
   // this needs a middleware to check that the request body is valid
+  Users.insert(req.body)
+    .then(user => {
+      res.status(201).json(user)
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Error posting user."
+      })
+    })
 });
 
 router.get('/', (req, res) => {
