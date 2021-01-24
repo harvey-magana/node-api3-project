@@ -10,7 +10,7 @@ const router = express.Router();
   getUserPosts, *
   insert, *
   update, *
-  remove,
+  remove, *
  */
 
 
@@ -110,9 +110,21 @@ router.post('/:id/posts', (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
-  const id = req.params.id;
-  const { text } = req.body;
-
+  Users.insert(req.body)
+    .then(post => {
+      if(post) {
+        res.status(201).json(post)
+      } else {
+        res.status(404).json({
+          message: "User post id not fond."
+        })
+      }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Error retreiving the user post."
+      })
+    })
 });
 
 router.get('/:id/posts', validateUserId(), (req, res) => {
