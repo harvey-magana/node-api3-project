@@ -4,17 +4,7 @@ const Users = require('./users-model.js');
 const { validateUserId, validateUser } = require('../middleware/middleware.js');
 const router = express.Router();
 
-/**
- *   get, *
-  getById, *
-  getUserPosts, *
-  insert, *
-  update, *
-  remove, *
- */
-
-
-router.post('/', (req, res) => {
+router.post('/', validateUser(), (req, res) => {
   // do your magic!
   // this needs a middleware to check that the request body is valid
   Users.insert(req.body)
