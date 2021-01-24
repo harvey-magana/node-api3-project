@@ -6,9 +6,9 @@ const router = express.Router();
 
 /**
  *   get, *
-  getById,
-  getUserPosts,
-  insert,
+  getById, *
+  getUserPosts, *
+  insert, *
   update,
   remove,
  */
@@ -98,12 +98,20 @@ router.post('/:id/posts', (req, res) => {
 router.get('/:id/posts', validateUserId(), (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
-  Users.findUserPosts(req.params.id)
+  Users.getUserPosts(req.params.id)
     .then(posts => {
-      res.status(200).json(posts)
+      if(posts.length > 0) {
+        res.status(200).json(posts)
+      } else {
+        res.status(400).json({
+          message: "No posts for this User found."
+        })
+      }
     })
     .catch(error => {
-      next(error)
+      res.status(500).json({
+        message: "Error retreiving posts for user."
+      })
     })
 });
 
