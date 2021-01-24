@@ -43,7 +43,7 @@ function validateUser(req, res, next) {
 function validatePostId(req, res, next) {
   // do your magic!
   return (req, res, next) => {
-    posts.getById(req.params.id)
+    Posts.getById(req.params.id)
       .then(post => {
         if(user) {
           req.post = post;

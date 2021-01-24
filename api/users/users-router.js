@@ -4,6 +4,14 @@ const Users = require('./users-model.js');
 const { validateUserId, validateUser } = require('../middleware/middleware.js');
 const router = express.Router();
 
+/**
+ *   get, *
+  getById,
+  getUserPosts,
+  insert,
+  update,
+  remove,
+ */
 
 
 router.post('/', (req, res) => {
