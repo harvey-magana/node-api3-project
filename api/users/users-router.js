@@ -45,8 +45,21 @@ router.get('/', (req, res) => {
 router.get('/:id', validateUserId(), (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
-  res.status(200).json(req.user)
-
+  Users.getById(req.params.id)
+    .then(user => {
+      if(user) {
+        res.status(200).json(user);
+      } else {
+        res.status(400).json({
+          message: "User id not found."
+        })
+      }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Error retrieving the User."
+      })
+    })
 });
 
 router.delete('/:id', validateUserId(), (req, res) => {
