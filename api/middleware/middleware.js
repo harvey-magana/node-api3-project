@@ -1,6 +1,5 @@
 function logger(req, res, next) {
   // do your magic!
-  let origin = req.get('origin');
   console.log(`[${new Date().toISOString()} ${req.method} to ${req.url}]`);
   next();
 }

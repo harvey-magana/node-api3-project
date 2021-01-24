@@ -1,18 +1,17 @@
 const express = require('express');
 
 const Posts = require('./posts-model.js');
-const { validatePostId, validatePost } = require('../middleware/middleware.js');
+//const { validatePostId, validatePost } = require('../middleware/middleware.js');
 const router = express.Router();
 
 /**
  *   get, *
-  getById,
-  insert,
+  getById, *
   update,
   remove,
  */
 
-router.get('/', (req, res) => {
+router.get('/', [validatePostId, validatePost], (req, res) => {
   // do your magic!
   console.log(req)
   Posts.get(req.query)
@@ -52,6 +51,24 @@ router.get('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
   // do your magic!
   // this needs a middleware to verify post id
+  Posts.remove(req.params.id)
+    .then(post => {
+      if(post > 0) {
+        res.status(200).json({
+          message: "The post has been deleted."
+        })
+      } else {
+        res.status(404).json({
+          message: "The post with the specified id does not exist."
+        })
+      }
+    })
+    .catch(error => {
+      console.log(error);
+      res.status(500).json({
+        error: "The post could not be remove."
+      })
+    })
 });
 
 router.put('/:id', (req, res) => {
@@ -59,7 +76,7 @@ router.put('/:id', (req, res) => {
   // this needs a middleware to verify post id
 });
 
-/*
+
 function validatePostId(req, res, next) {
   // do your magic!
   return (req, res, next) => {
@@ -95,7 +112,7 @@ function validatePost(req, res, next) {
     next();
   }
 }
-*/
+
 
 // do not forget to export the router
 module.exports = router;
