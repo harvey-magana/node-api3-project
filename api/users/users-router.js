@@ -82,7 +82,18 @@ router.put('/:id', [validateUserId(), validateUser()], (req, res) => {
   const changes = req.body;
   Users.update(req.params.id, changes)
     .then(user => {
-      res.status(200).json(user);
+        if(user) {
+          res.status(200).json(user);
+        } else {
+          res.status(400).json({
+            message: "User id not found."
+          });
+        }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Error retrieving the user."
+      })
     })
 });
 
