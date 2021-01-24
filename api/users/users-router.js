@@ -1,7 +1,7 @@
 const express = require('express');
 
 const Users = require('./users-model.js');
-
+const { validateUserId, validateUser } = require('../middleware/middleware.js');
 const router = express.Router();
 
 
@@ -32,21 +32,37 @@ router.get('/:id', validateUserId(), (req, res) => {
 
 });
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', validateUserId(), (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
+  Users.remove(req.params.id)
+    .then(user => {
+      if(user > 0) {
+        res.status(200).json({
+          message: "The user has been deleted."
+        })
+      }
+    })
 });
 
-router.put('/:id', (req, res) => {
+router.put('/:id', [validateUserId(), validateUser()], (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
+  const changes = req.body;
+  Users.update(req.params.id, changes)
+    .then(user => {
+      res.status(200).json(user);
+    })
 });
 
 router.post('/:id/posts', (req, res) => {
   // do your magic!
   // this needs a middleware to verify user id
   // and another middleware to check that the request body is valid
+  const id = req.params.id;
+  const { text } = req.body;
+
 });
 
 router.get('/:id/posts', validateUserId(), (req, res) => {
@@ -61,6 +77,7 @@ router.get('/:id/posts', validateUserId(), (req, res) => {
     })
 });
 
+/*
 function validateUserId(req, res, next) {
   // do your magic!
   return (req, res, next) => {
@@ -96,6 +113,6 @@ function validateUser(req, res, next) {
     next();
   }
 }
-
+*/
 // do not forget to export the router
 module.exports = router;
