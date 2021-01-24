@@ -9,7 +9,7 @@ const router = express.Router();
   getById, *
   getUserPosts, *
   insert, *
-  update,
+  update, *
   remove,
  */
 
@@ -71,7 +71,16 @@ router.delete('/:id', validateUserId(), (req, res) => {
         res.status(200).json({
           message: "The user has been deleted."
         })
+      } else {
+        res.status(400).json({
+          message: "The user with the specified id does not exist."
+        })
       }
+    })
+    .catch(error => {
+      res.status(500).json({
+        message: "Error retrieving the user."
+      })
     })
 });
 
