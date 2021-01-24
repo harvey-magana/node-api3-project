@@ -1,3 +1,6 @@
+const Users = require('../users/users-model.js');
+const Posts = require('../posts/posts-model.js');
+
 function logger(req, res, next) {
   // do your magic!
   console.log(`[${new Date().toISOString()} ${req.method} to ${req.url}]`);
@@ -7,7 +10,7 @@ function logger(req, res, next) {
 function validateUserId(req, res, next) {
   // do your magic!
   return (req, res, next) => {
-    users.getById(req.params.id)
+    Users.getById(req.params.id)
       .then(user => {
         if(user) {
           req.user = user;
